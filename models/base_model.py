@@ -4,6 +4,7 @@ Class for BaseModel
 
 import uuid
 from datetime import datetime
+import models
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -38,6 +39,8 @@ class BaseModel:
         with the current datetime
         """
         self.updated_at = datetime.now()
+        models.storage.new(self)  # add the instance to the dictionary
+        models.storage.save()
 
     def to_dict(self):
         """
