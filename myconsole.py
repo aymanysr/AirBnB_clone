@@ -4,8 +4,9 @@
 import cmd
 import sys
 import shlex  # for splitting the line into a list of arguments
-
-# classes = {"BaseModel": BaseModel}
+from models.base_model import BaseModel
+import models
+classes = {"BaseModel": BaseModel}
 
 
 class HBNBCommand(cmd.Cmd):
