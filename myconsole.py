@@ -93,5 +93,16 @@ class HBNBCommand(cmd.Cmd):
         if key in models.storage.all():
             models.storage.all().pop(key)
             models.storage.save()
+
+    def do_all(self, arg):
+        """Prints str reprsntation of all instncs based or not on class name"""
+        args = shlex.split(arg)
+        class_name = args[0] if len(args) > 0 else None
+        if class_name is not None and class_name not in classes:
+            print("** class doesn't exist **")
+            return False
+        instances = [str(value) for key, value in models.storage.all().items()
+                     if class_name is None or key.split('.')[0] == class_name]
+        print(instances)
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
