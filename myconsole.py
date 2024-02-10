@@ -30,6 +30,12 @@ class HBNBCommand(cmd.Cmd):
         cmd.Cmd.do_help(self, arg)
         print()
 
+    def precmd(self, line):
+        """This method is for non-interactive mode"""
+        if not sys.stdout.isatty():
+            print()
+            return line.strip()
+        return line
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
