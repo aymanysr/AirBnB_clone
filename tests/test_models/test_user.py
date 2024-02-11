@@ -5,6 +5,7 @@ import unittest
 from models.user import User
 from models.base_model import BaseModel
 
+
 class TestUser(unittest.TestCase):
     """Test the User class"""
 
@@ -35,6 +36,7 @@ class TestUser(unittest.TestCase):
         """Test the save method"""
         self.user.save()
         self.assertNotEqual(self.user.created_at, self.user.updated_at)
+
 
 if __name__ == '__main__':
     unittest.main()
