@@ -42,18 +42,16 @@ class TestBaseModel(unittest.TestCase):
 
     def test_to_dict_datetime_format(self):
         model = BaseModel()
-        model_dict = model.to_dict()
+        modl_dict = model.to_dict()
 
-        self.assertIsInstance(model_dict['created_at'], str)
-        self.assertIsInstance(model_dict['updated_at'], str)
+        self.assertIsInstance(modl_dict['created_at'], str)
+        self.assertIsInstance(modl_dict['updated_at'], str)
         self.assertEqual(
-            datetime.strptime(model_dict['created_at'], "%Y-%m-%dT%H:%M:%S.%f"),
-            model.created_at
-        )
+            datetime.strptime(modl_dict['created_at'], "%Y-%m-%dT%H:%M:%S.%f"),
+            model.created_at)
         self.assertEqual(
-            datetime.strptime(model_dict['updated_at'], "%Y-%m-%dT%H:%M:%S.%f"),
-            model.updated_at
-        )
+            datetime.strptime(modl_dict['updated_at'], "%Y-%m-%dT%H:%M:%S.%f"),
+            model.updated_at)
 
     def test_id_generation(self):
         model1 = BaseModel()
@@ -64,6 +62,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(model1.id, model2.id)
         self.assertTrue(uuid.UUID(model1.id, version=4))
         self.assertTrue(uuid.UUID(model2.id, version=4))
+
 
 if __name__ == '__main__':
     unittest.main()
