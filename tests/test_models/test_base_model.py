@@ -20,26 +20,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn('BaseModel', model_str)
         self.assertIn(model.id, model_str)
 
-    def test_save_method(self):
-        model = BaseModel()
-        created_at_before_save = model.created_at
-        updated_at_before_save = model.updated_at
-
-        model.save()
-
-        self.assertNotEqual(updated_at_before_save, model.updated_at)
-        self.assertEqual(created_at_before_save, model.created_at)
-
-    def test_to_dict_method(self):
-        model = BaseModel()
-        model_dict = model.to_dict()
-
-        self.assertIsInstance(model_dict, dict)
-        self.assertIn('__class__', model_dict)
-        self.assertIn('created_at', model_dict)
-        self.assertIn('updated_at', model_dict)
-        self.assertEqual(model_dict['__class__'], 'BaseModel')
-
     def test_to_dict_datetime_format(self):
         model = BaseModel()
         modl_dict = model.to_dict()
@@ -62,6 +42,39 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(model1.id, model2.id)
         self.assertTrue(uuid.UUID(model1.id, version=4))
         self.assertTrue(uuid.UUID(model2.id, version=4))
+
+    def test_init_with_kwargs(self):
+        """Test the initialization with keyword arguments"""
+        model_dict = {
+            'id': '1234',
+            'created_at': '2022-01-01T00:00:00.000000',
+            'updated_at': '2022-01-01T00:00:00.000000'
+        }
+        model = BaseModel(**model_dict)
+        self.assertEqual(model.id, '1234')
+        self.assertEqual(model.created_at, datetime.strptime('2022-01-01T00:00:00.000000', "%Y-%m-%dT%H:%M:%S.%f"))
+        self.assertEqual(model.updated_at, datetime.strptime('2022-01-01T00:00:00.000000', "%Y-%m-%dT%H:%M:%S.%f"))
+
+    def test_str_method(self):
+        """Test the __str__ method"""
+        model = BaseModel()
+        expected_str = f"[BaseModel] ({model.id}) {model.__dict__}"
+        self.assertEqual(str(model), expected_str)
+
+    def test_save_method(self):
+        """Test the save method"""
+        model = BaseModel()
+        updated_at_before_save = model.updated_at
+        model.save()
+        self.assertNotEqual(updated_at_before_save, model.updated_at)
+
+    def test_to_dict_method(self):
+        """Test the to_dict method"""
+        model = BaseModel()
+        model_dict = model.to_dict()
+        self.assertEqual(model_dict["__class__"], 'BaseModel')
+        self.assertEqual(model_dict["created_at"], model.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f"))
+        self.assertEqual(model_dict["updated_at"], model.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f"))
 
 
 if __name__ == '__main__':
