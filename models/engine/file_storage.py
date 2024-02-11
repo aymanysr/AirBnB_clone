@@ -12,8 +12,9 @@ from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
 
-class_dict = {"BaseModel": BaseModel, "User": User, "State": State, "City": City,
-              "Place": Place, "Amenity": Amenity, "Review": Review}
+class_dict = {"BaseModel": BaseModel, "User": User, "State": State,
+              "City": City, "Place": Place, "Amenity": Amenity,
+              "Review": Review}
 
 
 class FileStorage:
