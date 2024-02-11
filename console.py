@@ -4,11 +4,12 @@
 import cmd
 import sys
 import shlex  # for splitting the line into a list of arguments
-from models.base_model import BaseModel
 import models
 import logging
+from models.base_model import BaseModel
+from models import User
 
-classes = {"BaseModel": BaseModel}
+classes = {"BaseModel": BaseModel, "User": User}
 
 
 class HBNBCommand(cmd.Cmd):
