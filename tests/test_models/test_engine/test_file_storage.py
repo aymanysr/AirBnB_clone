@@ -6,6 +6,7 @@ import os
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 
+
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
 
@@ -43,6 +44,7 @@ class TestFileStorage(unittest.TestCase):
         self.fs.reload()
         new_objects = self.fs.all()
         self.assertEqual(objects, new_objects)
+
 
 if __name__ == '__main__':
     unittest.main()
