@@ -6,6 +6,8 @@ import sys
 import shlex  # for splitting the line into a list of arguments
 from models.base_model import BaseModel
 import models
+import logging
+
 classes = {"BaseModel": BaseModel}
 
 
@@ -37,9 +39,30 @@ class HBNBCommand(cmd.Cmd):
             return line.strip()
         return line
 
+    def _k_v_parser(self, args):
+        """Parses key-value pairs from arguments and returns a dictionary"""
+        new_dict = {}
+        for arg in args:
+            if "=" in arg:
+                key, value = arg.split('=', 1)
+                if value[0] == value[-1] == '"':
+                    value = shlex.split(value)[0].replace('_', ' ')
+                else:
+                    try:
+                        value = int(value)
+                    except Exception as e:
+                        logging.error(f"Exception occurred: {e}")
+                        try:
+                            value = float(value)
+                        except Exception as e:
+                            logging.error(f"Exception occurred: {e}")
+                            continue
+                new_dict[key] = value
+        return new_dict
+
     def do_create(self, arg):
         """Create a new instance of BaseModel"""
-        args = arg.split()
+        args = shlex.split(arg)
         if len(args) == 0:
             print("** class name is missing **")
             return False
@@ -48,6 +71,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return False
         new_instance = classes[class_name]()
+        if len(args) > 1:
+            kwargs = self._k_v_parser(args[1:])
+            for key, value in kwargs.items():
+                setattr(new_instance, key, value)
         new_instance.save()
         print(new_instance.id)
 
@@ -66,11 +93,11 @@ class HBNBCommand(cmd.Cmd):
             return False
         instance_id = args[1]
         key = class_name + "." + instance_id
-        if key not in models.storage.all():
+        all_instances = models.storage.all()
+        if key not in all_instances:
             print("** no instance found **")
             return False
-        if key in models.storage.all():
-            print(models.storage.all()[key])
+        print(all_instances[key])
 
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id"""
@@ -87,12 +114,12 @@ class HBNBCommand(cmd.Cmd):
             return False
         instance_id = args[1]
         key = class_name + "." + instance_id
-        if key not in models.storage.all():
+        all_instances = models.storage.all()
+        if key not in all_instances:
             print("** no instance found **")
             return False
-        if key in models.storage.all():
-            models.storage.all().pop(key)
-            models.storage.save()
+        all_instances.pop(key)
+        models.storage.save()
 
     def do_all(self, arg):
         """Prints str reprsntation of all instncs based or not on class name"""
@@ -120,7 +147,8 @@ class HBNBCommand(cmd.Cmd):
             return False
         instance_id = args[1]
         key = class_name + "." + instance_id
-        if key not in models.storage.all():
+        all_instances = models.storage.all()
+        if key not in all_instances:
             print("** no instance found **")
             return False
         if len(args) < 3:
@@ -131,7 +159,7 @@ class HBNBCommand(cmd.Cmd):
             return False
         attr_name = args[2]
         attr_value = args[3]
-        instance = models.storage.all()[key]
+        instance = all_instances[key]
         if attr_name not in ["id", "created_at", "updated_at"]:
             if attr_value.isdigit():
                 attr_value = int(attr_value)
