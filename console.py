@@ -71,7 +71,7 @@ class HBNBCommand(cmd.Cmd):
         """Create a new instance of BaseModel"""
         args = shlex.split(arg)
         if len(args) == 0:
-            print("** class name is missing **")
+            print("** class name missing **")
             return False
         class_name = args[0]
         if class_name not in classes:
@@ -89,7 +89,7 @@ class HBNBCommand(cmd.Cmd):
         """Prints the string representation of an instance"""
         args = shlex.split(arg)
         if len(args) == 0:
-            print("** class name is missing **")
+            print("** class name missing **")
             return False
         class_name = args[0]
         if class_name not in classes:
@@ -110,7 +110,7 @@ class HBNBCommand(cmd.Cmd):
         """Deletes an instance based on the class name and id"""
         args = shlex.split(arg)
         if len(args) == 0:
-            print("** class name is missing **")
+            print("** class name missing **")
             return False
         class_name = args[0]
         if class_name not in classes:
