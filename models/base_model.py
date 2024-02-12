@@ -16,18 +16,17 @@ class BaseModel:
     attributes/methods for other classes
     """
     def __init__(self, *args, **kwargs):
-        """
-        Initialize a new instance
-        """
+        """initializes the BaseModel instance"""
         if kwargs:
-            # If the instance is created from a dictionary representation
             for key, value in kwargs.items():
-                setattr(self, key, value)
+                if key == "created_at" or key == "updated_at":
+                    value = datetime.strptime(value, time)
+                if key != "__class__":
+                    setattr(self, key, value)
         else:
-            # If it's a new instance
             self.id = str(uuid.uuid4())
-            self.created_at = self.updated_at = datetime.now()
-            models.storage.new(self)  # add the instance to the dictionary
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
 
     def __str__(self):
         """
@@ -41,6 +40,7 @@ class BaseModel:
         with the current datetime
         """
         self.updated_at = datetime.now()
+        models.storage.new(self)  # add the instance to the dictionary
         models.storage.save()
 
     def to_dict(self):
