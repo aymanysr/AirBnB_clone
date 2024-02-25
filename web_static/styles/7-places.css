@@ -1,0 +1,28 @@
+.places {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.places h1{
+  display: flex;
+  justify-content: flex-start;
+  font-size: 30px;
+  width: 100%;
+}
+
+.places-group {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.places-group article {
+  margin: 20px;
+  padding: 20px;
+  width: 390px;
+  border: 1px #FF5A5F solid;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-evenly;
+}
